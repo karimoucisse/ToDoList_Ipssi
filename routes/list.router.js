@@ -33,17 +33,16 @@ router.post('/', async (req, res, next) => {
     }
 })
 
-// admin only
-router.put('/', async (req, res, next) => {
-    try {
-    } catch (error) {
-        next(error)
-    }
-})
-
 router.put('/:listId', async (req, res, next) => {
     try {
         const { listId } = req.params
+        const dataToModified = req.body
+        const modifiedList = await Schema.findByIdAndUpdate(
+            listId,
+            dataToModified,
+            { new: true }
+        )
+        res.status(200).json({message: "list modified !"})
     } catch (error) {
         next(error)
     }
