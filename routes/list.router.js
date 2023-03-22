@@ -51,6 +51,8 @@ router.put('/:listId', async (req, res, next) => {
 router.delete('/:listId', async (req, res, next) => {
     try {
         const { listId } = req.params
+        await Schema.findByIdAndDelete(listId)
+        res.status(200).json({message: "list deleted"})
     } catch (error) {
         next(error)
     }
