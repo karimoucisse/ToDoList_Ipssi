@@ -1,3 +1,11 @@
-const router = require("express").Router()
+const router = require("express").Router();
 
-module.exports = router
+router.post("/signup", async (req, res, next) => {
+  try {
+    
+  } catch (error) {
+    next(error);
+  }
+});
+
+module.exports = router;
