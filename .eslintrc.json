@@ -11,9 +11,9 @@
         "ecmaVersion": "latest"
     },
     "rules": {
-        "prettier/prettier": 0,
-        "no-underscore-dangle": 0,
-        "consistent-return": 0
+        "prettier/prettier": "error",
+        // "no-underscore-dangle": 0,
+        // "consistent-return": 0
     }
 }
 

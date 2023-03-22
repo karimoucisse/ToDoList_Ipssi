@@ -15,6 +15,13 @@ app.use("/auth", authRouter);
 app.use("/list", listRouter);
 app.use("/todo", todoRouter);
 
+app.use((err, req, res, next) => {
+  res.status(500).json({ status: 'error', message: err })
+})
+app.use((req, res) => {
+  res.status(404).json({ message: 'not found, check url !' })
+})
+
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);
 });
