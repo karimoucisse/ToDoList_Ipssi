@@ -11,6 +11,6 @@ exports.isUserAnAdmin = async (req, res, next) => {
             throw error
         }
     } catch (error) {
-        next("user is not authorized to access this route");
+        next("only an admin is authorized to access this route");
     }
 };

@@ -42,7 +42,7 @@ exports.createList = async (req, res, next) => {
     }
 };
 
-exports.modifyList = async (req, res, next) => {
+exports.updateList = async (req, res, next) => {
     try {
         const { listId } = req.params;
         const dataToModified = req.body;

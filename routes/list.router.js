@@ -8,14 +8,14 @@ const listController = require("../controllers/listController");
 router.get("/", isUserConnected, isUserAnAdmin, listController.getAllUsersLists);
 
 // get current user lists
-router.get("/", isUserConnected, listController.getUserLists);
+router.get("/user", isUserConnected, listController.getUserLists);
 
 // get one list by id
 router.get("/:listId", isUserConnected, listController.getOneList);
 
 router.post("/", isUserConnected, listController.createList);
 
-router.put("/:listId", isUserConnected, listController.modifyList);
+router.put("/:listId", isUserConnected, listController.updateList);
 
 router.delete("/:listId", isUserConnected, listController.deleteList);
 

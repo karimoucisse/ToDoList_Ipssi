@@ -1,4 +1,3 @@
-const router = require("express").Router();
 const Todo = require("../modeles/Todo.Schema");
 
 // admin only
@@ -6,6 +5,16 @@ exports.getAllUsersTodos = async (req, res, next) => {
     try {
         const Todos = await Todo.find();
         res.status(200).json(Todos);
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.getUserTodos = async (req, res, next) => {
+    try {
+        const { listId } = req.params;
+        const todos = await Todo.find({ listId });
+        res.status(200).json(todos);
     } catch (error) {
         next(error);
     }
@@ -38,7 +47,7 @@ exports.modifyTodo = async (req, res, next) => {
         const { todoId } = req.params;
         const dataToModified = req.body;
         const modifiedTodo = await Todo.findByIdAndUpdate(todoId, dataToModified, { new: true });
-        res.status(200).json({ message: "list modified !", modifiedTodo });
+        res.status(200).json({ message: "todo modified !", modifiedTodo });
     } catch (error) {
         next(error);
     }
@@ -48,10 +57,8 @@ exports.deleteTodo = async (req, res, next) => {
     try {
         const { todoId } = req.params;
         await Todo.findByIdAndDelete(todoId);
-        res.status(200).json({ message: "list deleted" });
+        res.status(200).json({ message: "todo deleted" });
     } catch (error) {
         next(error);
     }
 };
-
-module.exports = router;
