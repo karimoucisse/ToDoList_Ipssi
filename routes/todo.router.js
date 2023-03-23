@@ -15,7 +15,7 @@ router.get("/:todoId", isUserConnected, todoController.getOneTodo);
 
 router.post("/:listId", isUserConnected, todoController.createTodo);
 
-router.put("/:todoId", isUserConnected, todoController.modifyTodo);
+router.put("/:todoId", isUserConnected, todoController.updateTodo);
 
 router.delete("/:todoId", isUserConnected, todoController.deleteTodo);
 

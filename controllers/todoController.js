@@ -42,7 +42,7 @@ exports.createTodo = async (req, res, next) => {
     }
 };
 
-exports.modifyTodo = async (req, res, next) => {
+exports.updateTodo = async (req, res, next) => {
     try {
         const { todoId } = req.params;
         const dataToModified = req.body;
