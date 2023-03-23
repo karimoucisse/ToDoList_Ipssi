@@ -1,10 +1,12 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../modeles/User.Schema");
+const { verifyFields } = require("../utils/data");
 
 exports.createUser = async (req, res, next) => {
     try {
-        if (!("email" in req.body && "password" in req.body)) {
+        const isFieldValid = verifyFields("user", req.body);
+        if (!isFieldValid) {
             return res.status(422).json({ message: "need 2 keys : email, password" });
         }
         const { email, password } = req.body;
@@ -23,7 +25,8 @@ exports.createUser = async (req, res, next) => {
 
 exports.handleUserAuthentication = async (req, res, next) => {
     try {
-        if (!("email" in req.body && "password" in req.body)) {
+        const isFieldValid = verifyFields("user", req.body);
+        if (!isFieldValid) {
             return res.status(422).json({ message: "need 2 keys : email, password" });
         }
         const { email, password } = req.body;

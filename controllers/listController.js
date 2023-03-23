@@ -1,5 +1,6 @@
 const List = require("../modeles/List.Schema");
 const Todo = require("../modeles/Todo.Schema");
+const { verifyFields } = require("../utils/data");
 
 exports.getAllUsersLists = async (req, res, next) => {
     try {
@@ -32,6 +33,10 @@ exports.getOneList = async (req, res, next) => {
 
 exports.createList = async (req, res, next) => {
     try {
+        const isFieldValid = verifyFields("list", req.body)
+        if(!isFieldValid){
+            return res.status(422).json({ message: "only need 1 key: name" });
+        }
         let list = req.body;
         const { userId } = req.user;
         list = { userId, ...list };
@@ -45,6 +50,10 @@ exports.createList = async (req, res, next) => {
 exports.updateList = async (req, res, next) => {
     try {
         const { listId } = req.params;
+        const isFieldValid = verifyFields("list", req.body)
+        if(!isFieldValid){
+            return res.status(422).json({ message: "only need 1 key: name" });
+        }
         const dataToModified = req.body;
         const modifiedList = await List.findByIdAndUpdate(listId, dataToModified, { new: true });
         res.status(200).json({ message: "list modified !" });

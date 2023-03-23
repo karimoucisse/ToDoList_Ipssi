@@ -32,6 +32,10 @@ exports.getOneTodo = async (req, res, next) => {
 
 exports.createTodo = async (req, res, next) => {
     try {
+        const isFieldValid = verifyFields("todo", req.body)
+        if(!isFieldValid){
+            return res.status(422).json({ message: "need 2 key: status and description" });
+        }
         let todo = req.body;
         const { listId } = req.params;
         todo = { listId, ...todo };
@@ -45,6 +49,10 @@ exports.createTodo = async (req, res, next) => {
 exports.updateTodo = async (req, res, next) => {
     try {
         const { todoId } = req.params;
+        const isFieldValid = verifyFields("todo", req.body)
+        if(!isFieldValid){
+            return res.status(422).json({ message: "accepted key: status and description" });
+        }
         const dataToModified = req.body;
         const modifiedTodo = await Todo.findByIdAndUpdate(todoId, dataToModified, { new: true });
         res.status(200).json({ message: "todo modified !", modifiedTodo });
