@@ -2,6 +2,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dataController = require("../controllers/dataController");
 
+const isUserInDatabase = () => {
+    
+}
 exports.createUser = async (schema, data) => {
     try {
         const isDataValide = dataController.verifySchemafields();
@@ -25,6 +28,10 @@ exports.createUser = async (schema, data) => {
 };
 
 exports.handleUserAuthentication = async (schema, data) => {
+    const isDataValide = dataController.verifySchemafields();
+    if (!isDataValide) {
+        return { status: 422, message: "need 2 keys : email, password" };
+    }
     const { password, email } = data;
     const foundUser = await schema.findOne({ email });
     const dataToSend = {

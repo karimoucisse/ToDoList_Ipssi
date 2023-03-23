@@ -2,9 +2,8 @@ const { Schema, model } = require("mongoose");
 
 const ListSchema = Schema(
   {
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
     name: { type: String, require: true },
-    owner: { type: Schema.Types.ObjectId, ref: "User" },
-    todos: { type: Schema.Types.ObjectId, ref: "Todo" },
   },
   {
     timestamps: true,
