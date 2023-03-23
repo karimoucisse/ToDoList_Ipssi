@@ -1,5 +1,5 @@
 const schemasFields = {
-    user: ["email, password"],
+    user: ["email", "password"],
     list: ["name"],
     todo: ["status", "description"],
 };

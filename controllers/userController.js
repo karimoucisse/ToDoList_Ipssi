@@ -1,5 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const List = require("../modeles/List.Schema");
+const Todo = require("../modeles/Todo.Schema");
 const User = require("../modeles/User.Schema");
 const { verifyFields } = require("../utils/data");
 
@@ -53,6 +55,19 @@ exports.handleUserAuthentication = async (req, res, next) => {
             ),
         };
         res.status(200).json(dataToSend);
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.deleteUser = async (req, res, next) => {
+    try {
+        const { userId } = req.user;
+        await User.findByIdAndDelete({ _id: userId });
+        const lists = await List.find({ userId });
+        lists.forEach(async (list) => await Todo.deleteMany({ listId: list._id }));
+        await List.deleteMany({ userId });
+        res.status(200).json({ message: "deleted user" });
     } catch (error) {
         next(error);
     }
