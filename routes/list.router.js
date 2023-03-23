@@ -1,61 +1,22 @@
 const router = require("express").Router();
-const List = require("../modeles/List.Schema");
-
-const Schema = List;
+const { isUserAnAdmin } = require("../middlewares/isUserAnAdmin");
+const { isUserConnected } = require("../middlewares/isUserConnected");
+const listController = require("../controllers/listController");
 
 // admin only
-router.get("/", async (req, res, next) => {
-  try {
-    const lists = await Schema.find();
-    res.status(200).json(lists);
-  } catch (error) {
-    next(error);
-  }
-});
+// Get all Lists
+router.get("/", isUserConnected, isUserAnAdmin, listController.getAllUsersLists);
 
-router.get("/:listId", async (req, res, next) => {
-  try {
-    const { listId } = req.params;
-    const list = await Schema.findById(listId);
-    res.status(200).json(list);
-  } catch (error) {
-    next(error);
-  }
-});
+// get current user lists
+router.get("/", isUserConnected, listController.getUserLists);
 
-router.post("/", async (req, res, next) => {
-  try {
-    const list = req.body;
-    const response = Schema.create(list);
-    res.status(201).json(response);
-  } catch (error) {
-    next(error);
-  }
-});
+// get one list by id
+router.get("/:listId", isUserConnected, listController.getOneList);
 
-router.put("/:listId", async (req, res, next) => {
-  try {
-    const { listId } = req.params;
-    const dataToModified = req.body;
-    const modifiedList = await Schema.findByIdAndUpdate(
-      listId,
-      dataToModified,
-      { new: true }
-    );
-    res.status(200).json({ message: "list modified !" });
-  } catch (error) {
-    next(error);
-  }
-});
+router.post("/", isUserConnected, listController.createList);
 
-router.delete("/:listId", async (req, res, next) => {
-  try {
-    const { listId } = req.params;
-    await Schema.findByIdAndDelete(listId);
-    res.status(200).json({ message: "list deleted" });
-  } catch (error) {
-    next(error);
-  }
-});
+router.put("/:listId", isUserConnected, listController.modifyList);
+
+router.delete("/:listId", isUserConnected, listController.deleteList);
 
 module.exports = router;
