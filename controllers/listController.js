@@ -1,10 +1,9 @@
 const List = require("../modeles/List.Schema");
-
-const Schema = List;
+const Todo = require("../modeles/Todo.Schema");
 
 exports.getAllUsersLists = async (req, res, next) => {
     try {
-        const lists = await Schema.find();
+        const lists = await List.find();
         res.status(200).json(lists);
     } catch (error) {
         next(error);
@@ -14,7 +13,7 @@ exports.getAllUsersLists = async (req, res, next) => {
 exports.getUserLists = async (req, res, next) => {
     try {
         const { userId } = req.user;
-        const lists = await Schema.find({ userId });
+        const lists = await List.find({ userId });
         res.status(200).json(lists);
     } catch (error) {
         next(error);
@@ -24,7 +23,7 @@ exports.getUserLists = async (req, res, next) => {
 exports.getOneList = async (req, res, next) => {
     try {
         const { listId } = req.params;
-        const list = await Schema.findById(listId);
+        const list = await List.findById(listId);
         res.status(200).json(list);
     } catch (error) {
         next(error);
@@ -36,7 +35,7 @@ exports.createList = async (req, res, next) => {
         let list = req.body;
         const { userId } = req.user;
         list = { userId, ...list };
-        const response = Schema.create(list);
+        const response = List.create(list);
         res.status(201).json(response);
     } catch (error) {
         next(error);
@@ -47,7 +46,7 @@ exports.modifyList = async (req, res, next) => {
     try {
         const { listId } = req.params;
         const dataToModified = req.body;
-        const modifiedList = await Schema.findByIdAndUpdate(listId, dataToModified, { new: true });
+        const modifiedList = await List.findByIdAndUpdate(listId, dataToModified, { new: true });
         res.status(200).json({ message: "list modified !" });
     } catch (error) {
         next(error);
@@ -57,7 +56,8 @@ exports.modifyList = async (req, res, next) => {
 exports.deleteList = async (req, res, next) => {
     try {
         const { listId } = req.params;
-        await Schema.findByIdAndDelete(listId);
+        await List.findByIdAndDelete(listId);
+        await Todo.deleteMany({ listId });
         res.status(200).json({ message: "list deleted" });
     } catch (error) {
         next(error);
