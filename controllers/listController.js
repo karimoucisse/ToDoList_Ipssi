@@ -33,12 +33,17 @@ exports.getOneList = async (req, res, next) => {
 
 exports.createList = async (req, res, next) => {
     try {
-        const isFieldValid = verifyFields("list", req.body)
-        if(!isFieldValid){
+        const isFieldValid = verifyFields("list", req.body);
+        if (!isFieldValid) {
             return res.status(422).json({ message: "only need 1 key: name" });
         }
         let list = req.body;
         const { userId } = req.user;
+        // avoid that the user has 2 lists with the same name
+        const findListWithSameName = await List.find({ userId: userId, name: list.name });
+        if (findListWithSameName.length > 0) {
+            return res.status(409).json({ message: "list with the same already exist" });
+        }
         list = { userId, ...list };
         const response = List.create(list);
         res.status(201).json(response);
@@ -50,8 +55,8 @@ exports.createList = async (req, res, next) => {
 exports.updateList = async (req, res, next) => {
     try {
         const { listId } = req.params;
-        const isFieldValid = verifyFields("list", req.body)
-        if(!isFieldValid){
+        const isFieldValid = verifyFields("list", req.body);
+        if (!isFieldValid) {
             return res.status(422).json({ message: "only need 1 key: name" });
         }
         const dataToModified = req.body;
